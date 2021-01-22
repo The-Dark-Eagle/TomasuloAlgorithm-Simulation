@@ -2,6 +2,7 @@ There are 2 Add/Sub reservation stations (AdderBuffer.java), each station is (Ad
 There are 2 Mul/Div reservation stations (MulBuffer.java), each station is (MulR.java).
 There are 2 stations in the load buffer (LoadBuffer.java), each station (LoadR.java).
 There are 2 stations in the store buffer (StoreBuffer.java), each station (StoreR.java).
+
 There are 2 register files:
 	Floating point reg. file for the instructions (RegisterFile.java).
 	Integer reg. file for the loads and stores base address reg. (RegisterFile2.java).
