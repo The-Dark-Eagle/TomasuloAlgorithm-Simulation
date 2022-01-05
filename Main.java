@@ -5,6 +5,11 @@ public class Main {
 
 	public static int cycle = 1;
 	
+	public static int latency = 0;
+	public static int executionSteps;
+
+	public static int timings[] = {2, 5, 10, 2, 1};
+
 //	public static String[] instructions = {"L.D F1,R1,R3", "ADD.D F1,F2,F3", "MUL.D F4,F1,F3", "DIV.D F6,F4,F1", "S.D F1,R1,R3"};
 	public static ArrayList<String> instructions = new ArrayList<String>();
 	public static int currentInstruction = 0;
@@ -730,6 +735,53 @@ public class Main {
 			Inst current = instructions2.get(i);	
 			if(current.instruction.equals(instruction)) {
 				current.execComplete = cycle;
+				executionSteps = current.execComplete;
+				String currentOperation = getOperation(instruction);
+				if (currentOperation.equals("ADD.D") || currentOperation.equals("SUB.D"))
+					System.out.println("Latency: " + (cycle - timings[0] + 1));
+				else if (currentOperation.equals("MUL.D"))
+					System.out.println("Latency: "+ (cycle - timings[1] + 1));
+				else if (currentOperation.equals("DIV.D"))
+					System.out.println("Latency: "+ (cycle - timings[2] + 1));
+				
+				// Seperated IFs here to handle the exact address
+				else if (currentOperation.equals("L.D")) {
+					System.out.println("Latency: "+ (cycle - timings[3] + 1));
+					
+					String exactAddress = "";
+					double calculatedAddress = 0;
+
+					if (getOp2(instruction).equals("")) {
+						exactAddress = "Exact Address was: " + getOp1(instruction);
+						calculatedAddress = regFile.getR(getOp1(instruction).substring(1, 2));
+					} else if (!getOp2(instruction).equals("")) {
+						exactAddress = "Exact Address was: " + getOp1(instruction) + " + " + getOp2(instruction);
+						int registerNumber1 = regFile2.getR(getOp1(instruction).substring(1, 2));
+						int registerNumber2 = regFile2.getR(getOp2(instruction).substring(1, 2));
+						calculatedAddress = registerNumber1 + registerNumber2;
+					}
+					
+					System.out.println(exactAddress + " = " + calculatedAddress);
+					
+				}
+				else if (currentOperation.equals("S.D")) {
+					System.out.println("Latency: "+ (cycle - timings[4] + 1));
+
+					String exactAddress = "";
+					double calculatedAddress = 0;
+
+					if (getOp2(instruction).equals("")) {
+						exactAddress = "Exact Address was: " + getOp1(instruction);
+						calculatedAddress = regFile.getR(getOp1(instruction).substring(1, 2));
+					} else if (!getOp2(instruction).equals("")) {
+						exactAddress = "Exact Address was: " + getOp1(instruction) + " + " + getOp2(instruction);
+						int registerNumber1 = regFile2.getR(getOp1(instruction).substring(1, 2));
+						int registerNumber2 = regFile2.getR(getOp2(instruction).substring(1, 2));
+						calculatedAddress = registerNumber1 + registerNumber2;
+					}
+					
+					System.out.println(exactAddress + " = " + calculatedAddress);
+				}
 			}
 		}
 	}
